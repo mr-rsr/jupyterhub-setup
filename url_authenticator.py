@@ -20,7 +20,10 @@ class URLAuthenticator(Authenticator):
         try:
             pwd.getpwnam(username)
         except KeyError:
-            subprocess.run(['sudo', 'useradd', '-m', username], check=True)
+            try:
+                subprocess.run(['sudo', 'useradd', '-m', username], check=True)
+            except subprocess.CalledProcessError:
+                pass  # User creation failed, but continue
 
 class AutoLoginHandler(BaseHandler):
     
